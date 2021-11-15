@@ -8,7 +8,7 @@ module.exports = app => {
         console.log(req.body)
 
         const atendimento = req.body
-        Atendimentos.adiciona(atendimento)
+        Atendimentos.adiciona(atendimento, res)
 
         console.log(atendimento)
         res.send('Post de Atendimento')
