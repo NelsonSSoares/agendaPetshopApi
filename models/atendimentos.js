@@ -1,4 +1,5 @@
 const moment = require('moment')
+const atendimentos = require('../controllers/atendimentos')
 const conexao = require('../infra/connections')
 
 class Atendimentos{
@@ -37,12 +38,71 @@ class Atendimentos{
                     //res.status(400).json(error)
                     console.log(error)
                 }else{
-                    //res.status(201).json(resultados)
+                    //res.status(201).json(atendimentos)
+                    //res.sendStatus
                     console.log(resultados)
                 }
             })
         }  
 
+    }
+
+    lista(res){
+        const sql = 'SELECT * FROM atendimentos'
+
+        conexao.query(sql, (error, resultados) =>{
+            if(error){
+                res.status(400).json(error)
+            }else{
+                res.status(200).json(resultados)
+            }
+        })
+    }
+
+    buscaId(id,res){
+        const sql = `SELECT * FROM atendimentos WHERE id = ${id}`
+
+        
+
+        conexao.query(sql, (error, resultados) => {
+            const atendimento = resultados[0]
+            if(error){
+                console.log(error)
+            }else{
+                console.log(atendimento)
+            }
+        })
+    }
+    alterar(id, valores, res){
+
+        if(valores.data){
+            valores.data = moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
+        }
+
+        const sql = 'UPDATE atendimentos SET ? WHERE id= ?'
+
+        conexao.query(sql, [valores,id],(error, resultados)=>{
+            if(error){
+                //res.sendStatus(400).json(error)
+                console.log(error)
+            }else{
+                //res.sendStatus(200).json({...valores, id})
+                console.log(resultado)
+            }
+        })
+    }
+
+    deletar(id, res){
+        const sql = 'DELETE FROM atendimentos WHERE id = ?'
+
+        conexao.query(sql, id, (error, resultado)=>{
+            if(error){
+                console.log(error)
+            }else{
+                console.log(resultado)
+                //res.status(200).json({id})
+            }
+        })
     }
 }
 
